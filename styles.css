@@ -406,6 +406,12 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   font-weight: 700;
   color: var(--text);
 }
+.hero-stat-value--medal {
+  background: linear-gradient(135deg, #c0c0c0, #e8e8e8, #c0c0c0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 .hero-stat-label {
   font-size: 13px;
   color: var(--text-tertiary);
@@ -573,6 +579,40 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     gap: 64px;
     align-items: start;
   }
+}
+
+/* --- Credentials Ticker --- */
+.credentials-ticker {
+  overflow: hidden;
+  padding: 16px 0;
+  background: var(--bg-elevated);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.ticker-track {
+  display: flex;
+  gap: 0;
+  white-space: nowrap;
+  animation: tickerScroll 30s linear infinite;
+  width: max-content;
+}
+.ticker-item {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  padding: 0 12px;
+}
+.ticker-divider {
+  color: var(--accent);
+  padding: 0 8px;
+  font-weight: 300;
+}
+@keyframes tickerScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
 /* --- Featured / Pinned Posts --- */
