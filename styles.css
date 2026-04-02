@@ -663,17 +663,26 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   text-transform: uppercase;
   letter-spacing: 1px;
 }
-.featured-card-media {
+.featured-card .card-media {
   position: relative;
   aspect-ratio: 4/5;
   overflow: hidden;
   background: var(--surface);
 }
-.featured-card-media video,
-.featured-card-media img {
+.featured-card .card-media video,
+.featured-card .card-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+.card-media--embed iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  pointer-events: none;
 }
 .featured-card-overlay {
   position: absolute;
@@ -811,26 +820,26 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 .feed-card--post {
   width: 280px;
 }
-.feed-card-media {
+.feed-card .card-media {
   position: relative;
   overflow: hidden;
   background: var(--surface);
 }
-.feed-card--reel .feed-card-media {
+.feed-card--reel .card-media {
   aspect-ratio: 9/16;
 }
-.feed-card--post .feed-card-media {
+.feed-card--post .card-media {
   aspect-ratio: 1/1;
 }
-.feed-card-media video,
-.feed-card-media img {
+.feed-card .card-media video,
+.feed-card .card-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.6s var(--ease);
 }
-.feed-card:hover .feed-card-media video,
-.feed-card:hover .feed-card-media img {
+.feed-card:hover .card-media video,
+.feed-card:hover .card-media img {
   transform: scale(1.05);
 }
 .feed-card-overlay {
@@ -1065,8 +1074,8 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   transform: translateY(0);
 }
 
-/* --- Video Modal --- */
-.video-modal {
+/* --- Embed Modal --- */
+.embed-modal {
   position: fixed;
   inset: 0;
   z-index: 10000;
@@ -1079,46 +1088,49 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   visibility: hidden;
   transition: opacity 0.3s var(--ease), visibility 0.3s;
 }
-.video-modal.open {
+.embed-modal.open {
   opacity: 1;
   visibility: visible;
 }
-.video-modal-content {
+.embed-modal-content {
   position: relative;
   width: 90vw;
-  max-width: 420px;
-  aspect-ratio: 9/16;
+  max-width: 540px;
+  height: 80vh;
+  max-height: 740px;
   border-radius: var(--radius-xl);
   overflow: hidden;
   background: #000;
   transform: scale(0.9);
   transition: transform 0.3s var(--ease-bounce);
 }
-.video-modal.open .video-modal-content {
+.embed-modal.open .embed-modal-content {
   transform: scale(1);
 }
-.video-modal-content video {
+.embed-modal-content iframe {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  border: none;
 }
-.video-modal-close {
+.embed-modal-close {
   position: absolute;
-  top: 16px;
-  right: 16px;
+  top: 20px;
+  right: 20px;
   z-index: 10;
-  width: 40px;
-  height: 40px;
-  background: rgba(0,0,0,0.5);
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.1);
   backdrop-filter: blur(8px);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
+  cursor: pointer;
+  border: none;
   transition: background var(--duration);
 }
-.video-modal-close:hover { background: rgba(255,255,255,0.2); }
+.embed-modal-close:hover { background: rgba(255,255,255,0.25); }
 
 /* --- Utility --- */
 @media (max-width: 767px) {
