@@ -10,33 +10,19 @@
   const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_HANDLE}/`;
 
   // ============================================================
-  // YOUR INSTAGRAM POSTS
-  // Just paste your Instagram post/reel URLs below.
-  // To add a new post: open it on Instagram, tap Share,
-  // tap "Copy link", and paste the URL here.
-  //
-  // Featured posts appear large at the top of the page.
-  // Feed posts appear in the scrolling carousels below.
+  // FEATURED POSTS
+  // Paste your favourite Instagram post/reel URLs below.
+  // These appear as large pinned cards at the top of the page.
+  // To get a URL: open a post on Instagram → Share → Copy link
   // ============================================================
-
   const FEATURED_POSTS = [
     'https://www.instagram.com/reel/DQ5Yy4CEheG/',
-    // 'https://www.instagram.com/reel/PASTE_URL_HERE/',
-    // 'https://www.instagram.com/p/PASTE_URL_HERE/',
-  ];
-
-  const FEED_REELS = [
-    // 'https://www.instagram.com/reel/PASTE_URL_HERE/',
-    // 'https://www.instagram.com/reel/PASTE_URL_HERE/',
-  ];
-
-  const FEED_POSTS = [
-    // 'https://www.instagram.com/p/PASTE_URL_HERE/',
-    // 'https://www.instagram.com/p/PASTE_URL_HERE/',
+    // 'https://www.instagram.com/reel/PASTE_ANOTHER_URL/',
+    // 'https://www.instagram.com/p/PASTE_ANOTHER_URL/',
   ];
 
 
-  // --- Parse Instagram URL into shortcode + type ---
+  // --- Helpers ---
   function parseUrl(url) {
     var match = url.match(/instagram\.com\/(p|reel)\/([^/?]+)/);
     if (!match) return null;
@@ -131,28 +117,6 @@
   })();
 
 
-  // --- Build an embed card (featured or feed) ---
-  function buildEmbedCard(shortcode, type, className) {
-    var card = document.createElement('div');
-    card.className = className;
-    card.innerHTML =
-      '<div class="card-media card-media--embed">' +
-        '<iframe src="' + embedUrl(shortcode, type) + '" ' +
-        'frameborder="0" scrolling="no" allowtransparency="true" loading="lazy"></iframe>' +
-      '</div>' +
-      (type === 'reel' ?
-        '<div class="feed-card-play">' +
-          '<svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>' +
-        '</div>' +
-        '<div class="feed-card-type">Reel</div>' : '');
-
-    card.addEventListener('click', function () {
-      openEmbedModal(shortcode, type);
-    });
-    return card;
-  }
-
-
   // --- Build Featured Grid ---
   (function () {
     var grid = document.getElementById('featuredGrid');
@@ -161,117 +125,36 @@
     var posts = FEATURED_POSTS.map(parseUrl).filter(Boolean);
 
     if (posts.length === 0) {
-      // No URLs yet — show a helpful placeholder
       grid.innerHTML =
         '<div class="featured-placeholder">' +
-          '<p>Add your Instagram post URLs in <code>app.js</code> to display them here.</p>' +
+          '<p>Add your Instagram post URLs to the FEATURED_POSTS array in <code>app.js</code></p>' +
         '</div>';
       return;
     }
 
     posts.forEach(function (post) {
-      var card = buildEmbedCard(post.shortcode, post.type, 'featured-card reveal');
-      // Add pinned badge
-      var pin = document.createElement('div');
-      pin.className = 'featured-card-pin';
-      pin.innerHTML =
-        '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z"/></svg>' +
-        'Pinned';
-      card.insertBefore(pin, card.firstChild);
+      var card = document.createElement('div');
+      card.className = 'featured-card reveal';
+      card.innerHTML =
+        '<div class="featured-card-pin">' +
+          '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z"/></svg>' +
+          'Pinned' +
+        '</div>' +
+        '<div class="card-media card-media--embed">' +
+          '<iframe src="' + embedUrl(post.shortcode, post.type) + '" ' +
+          'frameborder="0" scrolling="no" allowtransparency="true" loading="lazy"></iframe>' +
+        '</div>' +
+        (post.type === 'reel' ?
+          '<div class="featured-card-play">' +
+            '<svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>' +
+          '</div>' : '');
 
-      // Upgrade play button size for featured cards
-      var play = card.querySelector('.feed-card-play');
-      if (play) {
-        play.className = 'featured-card-play';
-        play.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>';
-      }
-      // Remove "Reel" type badge from featured cards
-      var badge = card.querySelector('.feed-card-type');
-      if (badge) badge.remove();
-
+      card.addEventListener('click', function () {
+        openEmbedModal(post.shortcode, post.type);
+      });
       grid.appendChild(card);
     });
   })();
-
-
-  // --- Build Feed Carousels ---
-  function buildCarousel(trackId, urls, cardType) {
-    var track = document.getElementById(trackId);
-    if (!track) return;
-
-    var posts = urls.map(parseUrl).filter(Boolean);
-
-    if (posts.length === 0) {
-      // No URLs — show a single placeholder card
-      var placeholder = document.createElement('div');
-      placeholder.className = 'feed-card feed-card--' + cardType + ' feed-card--placeholder';
-      placeholder.innerHTML =
-        '<div class="card-media" style="background:linear-gradient(135deg, #141e30, #243b55)">' +
-          '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;text-align:center">' +
-            '<span style="font-size:13px;color:var(--text-secondary);line-height:1.5">Add ' + cardType + ' URLs in <code>app.js</code></span>' +
-          '</div>' +
-        '</div>';
-      track.appendChild(placeholder);
-      return;
-    }
-
-    posts.forEach(function (post) {
-      var card = buildEmbedCard(post.shortcode, post.type, 'feed-card feed-card--' + cardType);
-      track.appendChild(card);
-    });
-  }
-
-  buildCarousel('reelsTrack', FEED_REELS, 'reel');
-  buildCarousel('trainingTrack', FEED_POSTS, 'post');
-  // Hide the third carousel if there aren't enough posts to fill it
-  var clinicsTrack = document.getElementById('clinicsTrack');
-  if (clinicsTrack) clinicsTrack.closest('.carousel-section').style.display = 'none';
-
-
-  // --- Carousel Controls ---
-  document.querySelectorAll('.carousel-btn').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var carouselName = btn.dataset.carousel;
-      var track;
-      if (carouselName === 'reels') track = document.getElementById('reelsTrack');
-      else if (carouselName === 'training') track = document.getElementById('trainingTrack');
-      else if (carouselName === 'clinics') track = document.getElementById('clinicsTrack');
-      if (!track) return;
-
-      var scrollAmount = track.clientWidth * 0.7;
-      var direction = btn.classList.contains('carousel-btn--prev') ? -1 : 1;
-      track.scrollBy({ left: scrollAmount * direction, behavior: 'smooth' });
-    });
-  });
-
-
-  // --- Touch / Drag Scrolling Enhancement ---
-  document.querySelectorAll('.carousel-track').forEach(function (track) {
-    var isDown = false;
-    var startX, scrollLeft;
-
-    track.addEventListener('mousedown', function (e) {
-      isDown = true;
-      track.style.cursor = 'grabbing';
-      startX = e.pageX - track.offsetLeft;
-      scrollLeft = track.scrollLeft;
-    });
-    track.addEventListener('mouseleave', function () {
-      isDown = false;
-      track.style.cursor = '';
-    });
-    track.addEventListener('mouseup', function () {
-      isDown = false;
-      track.style.cursor = '';
-    });
-    track.addEventListener('mousemove', function (e) {
-      if (!isDown) return;
-      e.preventDefault();
-      var x = e.pageX - track.offsetLeft;
-      var walk = (x - startX) * 1.5;
-      track.scrollLeft = scrollLeft - walk;
-    });
-  });
 
 
   // --- Scroll Reveal ---

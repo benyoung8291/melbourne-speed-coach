@@ -228,7 +228,7 @@
     </div>
   </section>
 
-  <!-- Instagram Feed — Netflix Style Carousel -->
+  <!-- Instagram Feed — Auto-updating via Behold widget -->
   <section class="section feed" id="feed">
     <div class="feed-header">
       <div class="container">
@@ -238,78 +238,20 @@
       </div>
     </div>
 
-    <!-- Carousel Row: Reels -->
-    <div class="carousel-section">
-      <div class="container">
-        <div class="carousel-label">
-          <span class="carousel-label-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-          </span>
-          Reels
-        </div>
-      </div>
-      <div class="carousel" id="reelsCarousel">
-        <div class="carousel-track" id="reelsTrack">
-          <!-- Populated by JS -->
-        </div>
-      </div>
-      <div class="carousel-controls">
-        <button class="carousel-btn carousel-btn--prev" data-carousel="reels" aria-label="Previous">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-        </button>
-        <button class="carousel-btn carousel-btn--next" data-carousel="reels" aria-label="Next">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-        </button>
-      </div>
-    </div>
+    <!-- ============================================================
+         BEHOLD INSTAGRAM WIDGET — Auto-updates from your profile
+         Setup (2 minutes, free):
+         1. Go to behold.so and sign up (free, no credit card)
+         2. Connect your @melbournespeedcoach Instagram account
+         3. Create a feed, pick a layout you like
+         4. Copy your Feed ID and replace YOUR_FEED_ID below
 
-    <!-- Carousel Row: Training -->
-    <div class="carousel-section">
-      <div class="container">
-        <div class="carousel-label">
-          <span class="carousel-label-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          </span>
-          Speed & Acceleration
-        </div>
-      </div>
-      <div class="carousel" id="trainingCarousel">
-        <div class="carousel-track" id="trainingTrack">
-          <!-- Populated by JS -->
-        </div>
-      </div>
-      <div class="carousel-controls">
-        <button class="carousel-btn carousel-btn--prev" data-carousel="training" aria-label="Previous">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-        </button>
-        <button class="carousel-btn carousel-btn--next" data-carousel="training" aria-label="Next">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Carousel Row: Clinics -->
-    <div class="carousel-section">
-      <div class="container">
-        <div class="carousel-label">
-          <span class="carousel-label-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-          </span>
-          Clinics & Events
-        </div>
-      </div>
-      <div class="carousel" id="clinicsCarousel">
-        <div class="carousel-track" id="clinicsTrack">
-          <!-- Populated by JS -->
-        </div>
-      </div>
-      <div class="carousel-controls">
-        <button class="carousel-btn carousel-btn--prev" data-carousel="clinics" aria-label="Previous">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-        </button>
-        <button class="carousel-btn carousel-btn--next" data-carousel="clinics" aria-label="Next">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-        </button>
+         That's it — your latest posts will auto-update on every
+         page load. No code changes needed when you post new content.
+         ============================================================ -->
+    <div class="container">
+      <div class="instagram-feed-widget" id="instagramWidget">
+        <behold-widget feed-id="YOUR_FEED_ID"></behold-widget>
       </div>
     </div>
 
@@ -431,6 +373,9 @@
     </button>
     <div class="embed-modal-content" id="embedContainer"></div>
   </div>
+
+  <!-- Behold Instagram Widget (free, auto-updating) -->
+  <script src="https://w.behold.so/widget.js" type="module"></script>
 
   <script src="app.js"></script>
 </body>

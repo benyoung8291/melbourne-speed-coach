@@ -729,7 +729,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   transform: translate(-50%, -50%) scale(1.1);
 }
 
-/* --- Feed / Netflix Carousel --- */
+/* --- Feed Section --- */
 .feed {
   padding: 80px 0 60px;
   background: var(--bg-elevated);
@@ -737,179 +737,15 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 .feed-header {
   margin-bottom: 40px;
 }
-.carousel-section {
-  margin-bottom: 40px;
-}
-.carousel-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 16px;
-  color: var(--text);
-}
-.carousel-label-icon {
-  display: flex;
-  color: var(--accent);
-}
-.carousel {
-  position: relative;
-  overflow: hidden;
-}
-.carousel-track {
-  display: flex;
-  gap: 12px;
-  padding: 0 var(--gap);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  scroll-padding: 0 var(--gap);
-  padding-bottom: 8px;
-}
-.carousel-track::-webkit-scrollbar { display: none; }
 
-.carousel-controls {
-  display: none;
-  justify-content: flex-end;
-  gap: 8px;
-  padding: 12px var(--gap) 0;
-  max-width: var(--container);
-  margin: 0 auto;
-}
-@media (min-width: 768px) {
-  .carousel-controls { display: flex; }
-}
-.carousel-btn {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  color: var(--text-secondary);
-  transition: all var(--duration) var(--ease);
-}
-.carousel-btn:hover {
-  background: var(--bg-card-hover);
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-/* Carousel Cards */
-.feed-card {
-  flex-shrink: 0;
-  width: 260px;
-  scroll-snap-align: start;
+/* Instagram Feed Widget */
+.instagram-feed-widget {
+  min-height: 200px;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  transition: all var(--duration) var(--ease);
-  cursor: pointer;
-  position: relative;
 }
-.feed-card:hover {
-  border-color: var(--border-hover);
-  transform: scale(1.03);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-  z-index: 2;
-}
-.feed-card--reel {
-  width: 200px;
-  aspect-ratio: 9/16;
-}
-.feed-card--post {
-  width: 280px;
-}
-.feed-card .card-media {
-  position: relative;
-  overflow: hidden;
-  background: var(--surface);
-}
-.feed-card--reel .card-media {
-  aspect-ratio: 9/16;
-}
-.feed-card--post .card-media {
-  aspect-ratio: 1/1;
-}
-.feed-card .card-media video,
-.feed-card .card-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s var(--ease);
-}
-.feed-card:hover .card-media video,
-.feed-card:hover .card-media img {
-  transform: scale(1.05);
-}
-.feed-card-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(10,10,15,0.9) 0%, transparent 50%);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 16px;
-  opacity: 0;
-  transition: opacity var(--duration);
-}
-.feed-card:hover .feed-card-overlay {
-  opacity: 1;
-}
-.feed-card-caption {
-  font-size: 13px;
-  color: var(--text);
-  line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.feed-card-play {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 48px;
-  height: 48px;
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(12px);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--duration) var(--ease);
-  z-index: 2;
-}
-.feed-card-play svg {
-  margin-left: 3px;
-}
-.feed-card:hover .feed-card-play {
-  background: rgba(78,205,196,0.3);
-}
-.feed-card.playing .feed-card-play {
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(0.5);
-}
-.feed-card-type {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 3;
-  padding: 3px 10px;
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(8px);
-  border-radius: 100px;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.instagram-feed-widget behold-widget {
+  --behold-border-radius: 12px;
 }
 
 /* Feed CTA */
@@ -1161,6 +997,4 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   .section { padding: 60px 0; }
   .hero-stats { gap: 24px; }
   .hero-stat-value { font-size: 22px; }
-  .feed-card--reel { width: 160px; }
-  .feed-card--post { width: 240px; }
 }
