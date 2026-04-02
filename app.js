@@ -10,15 +10,20 @@
   const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_HANDLE}/`;
 
   // ============================================================
-  // INSTAGRAM POSTS
-  // To add a post: copy the shortcode from its Instagram URL
-  //   instagram.com/reel/DQ5Yy4CEheG/  →  shortcode: 'DQ5Yy4CEheG'
-  //   instagram.com/p/ABC123/           →  shortcode: 'ABC123'
-  // Posts with a shortcode display real Instagram content.
-  // Posts without a shortcode show a placeholder gradient.
+  // INSTAGRAM GRAPH API — Live Feed
+  // To show your real Instagram posts automatically:
+  // 1. Go to developers.facebook.com and create a free app
+  // 2. Add the "Instagram" product
+  // 3. Connect your Instagram account and generate an access token
+  // 4. Paste the token below
+  // Posts, reels, and images will load automatically from your feed.
+  // Token lasts 60 days — refresh by visiting the token URL logged
+  // in the browser console, or call the refresh endpoint.
   // ============================================================
+  const INSTAGRAM_ACCESS_TOKEN = '';
 
-  const pinnedPosts = [
+  // Fallback placeholder data (used when API token is not set)
+  const fallbackPinned = [
     {
       id: 'pinned-1',
       type: 'reel',
@@ -45,18 +50,16 @@
     }
   ];
 
-  const reelsContent = [
+  const fallbackReels = [
     { id: 'r1', shortcode: '', caption: 'Sprint mechanics breakdown — Hip position, arm drive, ground contact. The details matter.', gradient: 'linear-gradient(135deg, #141e30, #243b55)', icon: '🔥' },
     { id: 'r2', shortcode: '', caption: 'Acceleration wall drill — Building the neural pathways for explosive first-step quickness.', gradient: 'linear-gradient(135deg, #0f0c29, #302b63, #24243e)', icon: '💨' },
     { id: 'r3', shortcode: '', caption: 'Match day speed in training — Replicating game-speed demands in controlled drills.', gradient: 'linear-gradient(135deg, #1a1a2e, #0f3460)', icon: '🎯' },
     { id: 'r4', shortcode: '', caption: 'Change of direction — Decel, plant, re-accel. Three phases, one explosive movement.', gradient: 'linear-gradient(135deg, #0d1b2a, #1b2838, #2d4a5e)', icon: '⚡' },
     { id: 'r5', shortcode: '', caption: 'Top speed mechanics — When you hit max velocity, technique is everything.', gradient: 'linear-gradient(135deg, #16222A, #3A6073)', icon: '🏃' },
-    { id: 'r6', shortcode: '', caption: 'Resisted sprints — Building strength-speed with sled work for acceleration gains.', gradient: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)', icon: '💪' },
-    { id: 'r7', shortcode: '', caption: 'Plyometric training — Developing reactive strength and elastic energy for faster ground contact times.', gradient: 'linear-gradient(135deg, #1a1a2e, #16213e)', icon: '🔋' },
-    { id: 'r8', shortcode: '', caption: 'Block starts technique — Power angles, reaction time, and the first three steps out of the blocks.', gradient: 'linear-gradient(135deg, #0d1117, #1a3a4a)', icon: '🚀' }
+    { id: 'r6', shortcode: '', caption: 'Resisted sprints — Building strength-speed with sled work for acceleration gains.', gradient: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)', icon: '💪' }
   ];
 
-  const trainingContent = [
+  const fallbackTraining = [
     { id: 't1', shortcode: '', caption: 'Speed session at Preston Athletics Club — Athletes working on acceleration mechanics and sprint form.', gradient: 'linear-gradient(135deg, #1a2a3a, #2d5a5a)', icon: '🏟️' },
     { id: 't2', shortcode: '', caption: 'AFL pre-season speed work — Getting Hurstbridge FNC players game-ready with sport-specific sprint training.', gradient: 'linear-gradient(135deg, #1a1a2e, #3a2a1a)', icon: '🏈' },
     { id: 't3', shortcode: '', caption: 'Video analysis session — Breaking down sprint footage frame by frame to identify technical improvements.', gradient: 'linear-gradient(135deg, #0f2027, #1a3a5a)', icon: '📹' },
@@ -65,7 +68,7 @@
     { id: 't6', shortcode: '', caption: 'Athlete testing day — Timing 10m, 20m, and 40m splits to track progress and adjust programming.', gradient: 'linear-gradient(135deg, #16222A, #3A6073)', icon: '⏱️' }
   ];
 
-  const clinicsContent = [
+  const fallbackClinics = [
     { id: 'c1', shortcode: '', caption: 'Speed & Agility Clinic — 1.5hr group sessions for young athletes ages 10-18. Limited to 10 spots per session. Book via DM or Eventbrite.', gradient: 'linear-gradient(135deg, #0f3460, #1a1a2e)', icon: '📋' },
     { id: 'c2', shortcode: '', caption: 'School athletics program — Working with St Monica\'s College students on sprint and jump technique for inter-school competitions.', gradient: 'linear-gradient(135deg, #1a3a4a, #0d1117)', icon: '🏫' },
     { id: 'c3', shortcode: '', caption: 'Junior football speed development — Yarrambat JFC players building acceleration and agility for the upcoming season.', gradient: 'linear-gradient(135deg, #2d4a5e, #0d1b2a)', icon: '⚽' },
@@ -74,15 +77,61 @@
   ];
 
 
-  // --- Helper: Build embed URL from shortcode ---
+  // --- Helpers ---
   function embedUrl(shortcode, type) {
     var prefix = type === 'reel' ? 'reel' : 'p';
     return 'https://www.instagram.com/' + prefix + '/' + shortcode + '/embed/';
   }
 
-  function postUrl(shortcode, type) {
-    var prefix = type === 'reel' ? 'reel' : 'p';
-    return 'https://www.instagram.com/' + prefix + '/' + shortcode + '/';
+  function extractShortcode(permalink) {
+    var match = permalink.match(/\/(p|reel)\/([^/?]+)/);
+    if (!match) return null;
+    return { shortcode: match[2], type: match[1] === 'reel' ? 'reel' : 'post' };
+  }
+
+
+  // --- Instagram Graph API ---
+  function fetchInstagramFeed() {
+    if (!INSTAGRAM_ACCESS_TOKEN) return Promise.resolve(null);
+
+    var apiUrl = 'https://graph.instagram.com/me/media' +
+      '?fields=id,caption,media_type,media_url,thumbnail_url,permalink,timestamp' +
+      '&limit=25&access_token=' + INSTAGRAM_ACCESS_TOKEN;
+
+    return fetch(apiUrl)
+      .then(function (res) {
+        if (!res.ok) throw new Error('Instagram API returned ' + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        if (data.error) throw new Error(data.error.message);
+        return data.data;
+      })
+      .catch(function (err) {
+        console.warn('Instagram API fetch failed:', err.message);
+        console.info(
+          'To refresh your token, visit:\n' +
+          'https://graph.instagram.com/refresh_access_token' +
+          '?grant_type=ig_refresh_token&access_token=' + INSTAGRAM_ACCESS_TOKEN
+        );
+        return null;
+      });
+  }
+
+  function apiPostToItem(post) {
+    var info = extractShortcode(post.permalink || '');
+    return {
+      id: post.id,
+      type: info ? info.type : 'post',
+      shortcode: info ? info.shortcode : '',
+      caption: post.caption || '',
+      mediaSrc: post.media_type === 'VIDEO'
+        ? (post.thumbnail_url || post.media_url)
+        : post.media_url,
+      mediaType: post.media_type,
+      gradient: 'linear-gradient(135deg, #141e30, #243b55)',
+      icon: post.media_type === 'VIDEO' ? '🎬' : '📸'
+    };
   }
 
 
@@ -108,7 +157,6 @@
     document.body.style.overflow = '';
   }
 
-  // Modal close listeners
   var embedModal = document.getElementById('embedModal');
   if (embedModal) {
     embedModal.addEventListener('click', function (e) {
@@ -169,14 +217,22 @@
   })();
 
 
-  // --- Helper: Build card media HTML ---
+  // --- Build card media HTML ---
   function buildMediaHtml(item, type, iconSize) {
+    // Real image/video from API
+    if (item.mediaSrc) {
+      return '<div class="card-media">' +
+        '<img src="' + item.mediaSrc + '" alt="" loading="lazy">' +
+      '</div>';
+    }
+    // Embed iframe for posts with a known shortcode
     if (item.shortcode) {
       return '<div class="card-media card-media--embed" style="background:' + (item.gradient || 'var(--surface)') + '">' +
         '<iframe src="' + embedUrl(item.shortcode, type) + '" ' +
         'frameborder="0" scrolling="no" allowtransparency="true" loading="lazy"></iframe>' +
       '</div>';
     }
+    // Gradient placeholder
     return '<div class="card-media" style="background:' + item.gradient + '">' +
       '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:' + iconSize + 'px;opacity:0.3">' + item.icon + '</div>' +
     '</div>';
@@ -184,10 +240,12 @@
 
 
   // --- Build Featured Grid ---
-  (function () {
+  function buildFeaturedGrid(posts) {
     var grid = document.getElementById('featuredGrid');
     if (!grid) return;
-    pinnedPosts.forEach(function (post) {
+    grid.innerHTML = '';
+
+    posts.forEach(function (post) {
       var card = document.createElement('div');
       card.className = 'featured-card reveal';
 
@@ -216,13 +274,19 @@
       });
       grid.appendChild(card);
     });
-  })();
+
+    // Re-observe for scroll animations
+    grid.querySelectorAll('.reveal').forEach(function (el) {
+      revealObserver.observe(el);
+    });
+  }
 
 
   // --- Build Feed Carousels ---
   function buildCarousel(trackId, items, cardType) {
     var track = document.getElementById(trackId);
     if (!track) return;
+    track.innerHTML = '';
 
     items.forEach(function (item) {
       var card = document.createElement('div');
@@ -252,9 +316,56 @@
     });
   }
 
-  buildCarousel('reelsTrack', reelsContent, 'reel');
-  buildCarousel('trainingTrack', trainingContent, 'post');
-  buildCarousel('clinicsTrack', clinicsContent, 'post');
+
+  // --- Scroll Reveal (declared early so buildFeaturedGrid can use it) ---
+  var revealElements = document.querySelectorAll('.reveal, .role-card, .service-card, .contact-card, .services-details, .about-text, .about-heading');
+  revealElements.forEach(function (el) { el.classList.add('reveal'); });
+
+  var revealObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(function (el) {
+    revealObserver.observe(el);
+  });
+
+
+  // --- Initialize Feed ---
+  function renderFallback() {
+    buildFeaturedGrid(fallbackPinned);
+    buildCarousel('reelsTrack', fallbackReels, 'reel');
+    buildCarousel('trainingTrack', fallbackTraining, 'post');
+    buildCarousel('clinicsTrack', fallbackClinics, 'post');
+  }
+
+  fetchInstagramFeed().then(function (apiPosts) {
+    if (!apiPosts || apiPosts.length === 0) {
+      renderFallback();
+      return;
+    }
+
+    var items = apiPosts.map(apiPostToItem);
+    var videos = items.filter(function (p) { return p.mediaType === 'VIDEO'; });
+    var images = items.filter(function (p) { return p.mediaType !== 'VIDEO'; });
+
+    // Featured: first 3 posts
+    buildFeaturedGrid(items.slice(0, 3));
+
+    // Reels carousel: all videos
+    buildCarousel('reelsTrack', videos.length > 0 ? videos : fallbackReels, 'reel');
+
+    // Training carousel: first half of images
+    var half = Math.ceil(images.length / 2);
+    buildCarousel('trainingTrack', images.length > 0 ? images.slice(0, half) : fallbackTraining, 'post');
+
+    // Clinics carousel: second half of images
+    buildCarousel('clinicsTrack', images.length > half ? images.slice(half) : fallbackClinics, 'post');
+  });
 
 
   // --- Carousel Controls ---
@@ -300,24 +411,6 @@
       var walk = (x - startX) * 1.5;
       track.scrollLeft = scrollLeft - walk;
     });
-  });
-
-
-  // --- Scroll Reveal ---
-  var revealElements = document.querySelectorAll('.reveal, .role-card, .service-card, .contact-card, .services-details, .about-text, .about-heading');
-  revealElements.forEach(function (el) { el.classList.add('reveal'); });
-
-  var revealObserver = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-  document.querySelectorAll('.reveal').forEach(function (el) {
-    revealObserver.observe(el);
   });
 
 
