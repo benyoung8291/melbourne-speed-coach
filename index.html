@@ -239,19 +239,19 @@
     </div>
 
     <!-- ============================================================
-         BEHOLD INSTAGRAM WIDGET — Auto-updates from your profile
+         ELFSIGHT INSTAGRAM WIDGET — Auto-updates from any public profile
+         No need to own or log into the Instagram account.
          Setup (2 minutes, free):
-         1. Go to behold.so and sign up (free, no credit card)
-         2. Connect your @melbournespeedcoach Instagram account
-         3. Create a feed, pick a layout you like
-         4. Copy your Feed ID and replace YOUR_FEED_ID below
-
-         That's it — your latest posts will auto-update on every
-         page load. No code changes needed when you post new content.
+         1. Go to elfsight.com and create a free account (yours)
+         2. Create an "Instagram Feed" widget
+         3. Enter username: melbournespeedcoach
+         4. Pick a layout (grid, slider, etc.) and customise colours
+         5. Copy the App ID and replace YOUR_APP_ID below
+         6. Done — auto-updates whenever new posts are made
          ============================================================ -->
     <div class="container">
       <div class="instagram-feed-widget" id="instagramWidget">
-        <behold-widget feed-id="YOUR_FEED_ID"></behold-widget>
+        <div class="elfsight-app-YOUR_APP_ID"></div>
       </div>
     </div>
 
@@ -374,8 +374,8 @@
     <div class="embed-modal-content" id="embedContainer"></div>
   </div>
 
-  <!-- Behold Instagram Widget (free, auto-updating) -->
-  <script src="https://w.behold.so/widget.js" type="module"></script>
+  <!-- ElfSight Instagram Widget (free, works with any public profile) -->
+  <script src="https://static.elfsight.com/platform/platform.js" async></script>
 
   <script src="app.js"></script>
 </body>

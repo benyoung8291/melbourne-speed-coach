@@ -744,8 +744,9 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   border-radius: var(--radius-lg);
   overflow: hidden;
 }
-.instagram-feed-widget behold-widget {
-  --behold-border-radius: 12px;
+.instagram-feed-widget [class^="elfsight-app-"] {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
 /* Feed CTA */
