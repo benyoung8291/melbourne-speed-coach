@@ -10,128 +10,42 @@
   const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_HANDLE}/`;
 
   // ============================================================
-  // INSTAGRAM GRAPH API — Live Feed
-  // To show your real Instagram posts automatically:
-  // 1. Go to developers.facebook.com and create a free app
-  // 2. Add the "Instagram" product
-  // 3. Connect your Instagram account and generate an access token
-  // 4. Paste the token below
-  // Posts, reels, and images will load automatically from your feed.
-  // Token lasts 60 days — refresh by visiting the token URL logged
-  // in the browser console, or call the refresh endpoint.
+  // YOUR INSTAGRAM POSTS
+  // Just paste your Instagram post/reel URLs below.
+  // To add a new post: open it on Instagram, tap Share,
+  // tap "Copy link", and paste the URL here.
+  //
+  // Featured posts appear large at the top of the page.
+  // Feed posts appear in the scrolling carousels below.
   // ============================================================
-  const INSTAGRAM_ACCESS_TOKEN = '';
 
-  // Fallback placeholder data (used when API token is not set)
-  const fallbackPinned = [
-    {
-      id: 'pinned-1',
-      type: 'reel',
-      shortcode: 'DQ5Yy4CEheG',
-      caption: 'Optimizing Long Jump Approach Training — Breaking down the mechanics of a consistent and powerful approach run. Every step counts.',
-      gradient: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)',
-      icon: '🏃'
-    },
-    {
-      id: 'pinned-2',
-      type: 'reel',
-      shortcode: '',
-      caption: 'Acceleration mechanics drill — First 10m is where races are won and lost. Building explosive starts with proper shin angles and force application.',
-      gradient: 'linear-gradient(135deg, #1a1a2e, #16213e, #0f3460)',
-      icon: '⚡'
-    },
-    {
-      id: 'pinned-3',
-      type: 'post',
-      shortcode: '',
-      caption: 'Speed & Agility Clinic — Helping young athletes ages 10-18 develop elite movement skills. Limited spots available at Preston Athletics Club.',
-      gradient: 'linear-gradient(135deg, #0d1117, #1a3a4a, #2d6b6b)',
-      icon: '🏆'
-    }
+  const FEATURED_POSTS = [
+    'https://www.instagram.com/reel/DQ5Yy4CEheG/',
+    // 'https://www.instagram.com/reel/PASTE_URL_HERE/',
+    // 'https://www.instagram.com/p/PASTE_URL_HERE/',
   ];
 
-  const fallbackReels = [
-    { id: 'r1', shortcode: '', caption: 'Sprint mechanics breakdown — Hip position, arm drive, ground contact. The details matter.', gradient: 'linear-gradient(135deg, #141e30, #243b55)', icon: '🔥' },
-    { id: 'r2', shortcode: '', caption: 'Acceleration wall drill — Building the neural pathways for explosive first-step quickness.', gradient: 'linear-gradient(135deg, #0f0c29, #302b63, #24243e)', icon: '💨' },
-    { id: 'r3', shortcode: '', caption: 'Match day speed in training — Replicating game-speed demands in controlled drills.', gradient: 'linear-gradient(135deg, #1a1a2e, #0f3460)', icon: '🎯' },
-    { id: 'r4', shortcode: '', caption: 'Change of direction — Decel, plant, re-accel. Three phases, one explosive movement.', gradient: 'linear-gradient(135deg, #0d1b2a, #1b2838, #2d4a5e)', icon: '⚡' },
-    { id: 'r5', shortcode: '', caption: 'Top speed mechanics — When you hit max velocity, technique is everything.', gradient: 'linear-gradient(135deg, #16222A, #3A6073)', icon: '🏃' },
-    { id: 'r6', shortcode: '', caption: 'Resisted sprints — Building strength-speed with sled work for acceleration gains.', gradient: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)', icon: '💪' }
+  const FEED_REELS = [
+    // 'https://www.instagram.com/reel/PASTE_URL_HERE/',
+    // 'https://www.instagram.com/reel/PASTE_URL_HERE/',
   ];
 
-  const fallbackTraining = [
-    { id: 't1', shortcode: '', caption: 'Speed session at Preston Athletics Club — Athletes working on acceleration mechanics and sprint form.', gradient: 'linear-gradient(135deg, #1a2a3a, #2d5a5a)', icon: '🏟️' },
-    { id: 't2', shortcode: '', caption: 'AFL pre-season speed work — Getting Hurstbridge FNC players game-ready with sport-specific sprint training.', gradient: 'linear-gradient(135deg, #1a1a2e, #3a2a1a)', icon: '🏈' },
-    { id: 't3', shortcode: '', caption: 'Video analysis session — Breaking down sprint footage frame by frame to identify technical improvements.', gradient: 'linear-gradient(135deg, #0f2027, #1a3a5a)', icon: '📹' },
-    { id: 't4', shortcode: '', caption: 'Overspeed training — Using downhill sprints and assisted runs to push beyond current top-end speed.', gradient: 'linear-gradient(135deg, #141e30, #243b55)', icon: '⚡' },
-    { id: 't5', shortcode: '', caption: 'Warm-up protocol — Dynamic mobility and activation drills to prep the nervous system for maximum output.', gradient: 'linear-gradient(135deg, #0d1b2a, #1b2838)', icon: '🔄' },
-    { id: 't6', shortcode: '', caption: 'Athlete testing day — Timing 10m, 20m, and 40m splits to track progress and adjust programming.', gradient: 'linear-gradient(135deg, #16222A, #3A6073)', icon: '⏱️' }
-  ];
-
-  const fallbackClinics = [
-    { id: 'c1', shortcode: '', caption: 'Speed & Agility Clinic — 1.5hr group sessions for young athletes ages 10-18. Limited to 10 spots per session. Book via DM or Eventbrite.', gradient: 'linear-gradient(135deg, #0f3460, #1a1a2e)', icon: '📋' },
-    { id: 'c2', shortcode: '', caption: 'School athletics program — Working with St Monica\'s College students on sprint and jump technique for inter-school competitions.', gradient: 'linear-gradient(135deg, #1a3a4a, #0d1117)', icon: '🏫' },
-    { id: 'c3', shortcode: '', caption: 'Junior football speed development — Yarrambat JFC players building acceleration and agility for the upcoming season.', gradient: 'linear-gradient(135deg, #2d4a5e, #0d1b2a)', icon: '⚽' },
-    { id: 'c4', shortcode: '', caption: 'Summer speed camp — Intensive 3-day program covering sprint mechanics, agility, and speed endurance. Register now.', gradient: 'linear-gradient(135deg, #203a43, #0f2027)', icon: '☀️' },
-    { id: 'c5', shortcode: '', caption: 'Private coaching available — Individualised speed and acceleration programs with video analysis and ongoing programming.', gradient: 'linear-gradient(135deg, #16213e, #1a1a2e)', icon: '🎯' }
+  const FEED_POSTS = [
+    // 'https://www.instagram.com/p/PASTE_URL_HERE/',
+    // 'https://www.instagram.com/p/PASTE_URL_HERE/',
   ];
 
 
-  // --- Helpers ---
-  function embedUrl(shortcode, type) {
-    var prefix = type === 'reel' ? 'reel' : 'p';
-    return 'https://www.instagram.com/' + prefix + '/' + shortcode + '/embed/';
-  }
-
-  function extractShortcode(permalink) {
-    var match = permalink.match(/\/(p|reel)\/([^/?]+)/);
+  // --- Parse Instagram URL into shortcode + type ---
+  function parseUrl(url) {
+    var match = url.match(/instagram\.com\/(p|reel)\/([^/?]+)/);
     if (!match) return null;
     return { shortcode: match[2], type: match[1] === 'reel' ? 'reel' : 'post' };
   }
 
-
-  // --- Instagram Graph API ---
-  function fetchInstagramFeed() {
-    if (!INSTAGRAM_ACCESS_TOKEN) return Promise.resolve(null);
-
-    var apiUrl = 'https://graph.instagram.com/me/media' +
-      '?fields=id,caption,media_type,media_url,thumbnail_url,permalink,timestamp' +
-      '&limit=25&access_token=' + INSTAGRAM_ACCESS_TOKEN;
-
-    return fetch(apiUrl)
-      .then(function (res) {
-        if (!res.ok) throw new Error('Instagram API returned ' + res.status);
-        return res.json();
-      })
-      .then(function (data) {
-        if (data.error) throw new Error(data.error.message);
-        return data.data;
-      })
-      .catch(function (err) {
-        console.warn('Instagram API fetch failed:', err.message);
-        console.info(
-          'To refresh your token, visit:\n' +
-          'https://graph.instagram.com/refresh_access_token' +
-          '?grant_type=ig_refresh_token&access_token=' + INSTAGRAM_ACCESS_TOKEN
-        );
-        return null;
-      });
-  }
-
-  function apiPostToItem(post) {
-    var info = extractShortcode(post.permalink || '');
-    return {
-      id: post.id,
-      type: info ? info.type : 'post',
-      shortcode: info ? info.shortcode : '',
-      caption: post.caption || '',
-      mediaSrc: post.media_type === 'VIDEO'
-        ? (post.thumbnail_url || post.media_url)
-        : post.media_url,
-      mediaType: post.media_type,
-      gradient: 'linear-gradient(135deg, #141e30, #243b55)',
-      icon: post.media_type === 'VIDEO' ? '🎬' : '📸'
-    };
+  function embedUrl(shortcode, type) {
+    var prefix = type === 'reel' ? 'reel' : 'p';
+    return 'https://www.instagram.com/' + prefix + '/' + shortcode + '/embed/';
   }
 
 
@@ -217,155 +131,101 @@
   })();
 
 
-  // --- Build card media HTML ---
-  function buildMediaHtml(item, type, iconSize) {
-    // Real image/video from API
-    if (item.mediaSrc) {
-      return '<div class="card-media">' +
-        '<img src="' + item.mediaSrc + '" alt="" loading="lazy">' +
-      '</div>';
-    }
-    // Embed iframe for posts with a known shortcode
-    if (item.shortcode) {
-      return '<div class="card-media card-media--embed" style="background:' + (item.gradient || 'var(--surface)') + '">' +
-        '<iframe src="' + embedUrl(item.shortcode, type) + '" ' +
+  // --- Build an embed card (featured or feed) ---
+  function buildEmbedCard(shortcode, type, className) {
+    var card = document.createElement('div');
+    card.className = className;
+    card.innerHTML =
+      '<div class="card-media card-media--embed">' +
+        '<iframe src="' + embedUrl(shortcode, type) + '" ' +
         'frameborder="0" scrolling="no" allowtransparency="true" loading="lazy"></iframe>' +
-      '</div>';
-    }
-    // Gradient placeholder
-    return '<div class="card-media" style="background:' + item.gradient + '">' +
-      '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:' + iconSize + 'px;opacity:0.3">' + item.icon + '</div>' +
-    '</div>';
+      '</div>' +
+      (type === 'reel' ?
+        '<div class="feed-card-play">' +
+          '<svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>' +
+        '</div>' +
+        '<div class="feed-card-type">Reel</div>' : '');
+
+    card.addEventListener('click', function () {
+      openEmbedModal(shortcode, type);
+    });
+    return card;
   }
 
 
   // --- Build Featured Grid ---
-  function buildFeaturedGrid(posts) {
+  (function () {
     var grid = document.getElementById('featuredGrid');
     if (!grid) return;
-    grid.innerHTML = '';
+
+    var posts = FEATURED_POSTS.map(parseUrl).filter(Boolean);
+
+    if (posts.length === 0) {
+      // No URLs yet — show a helpful placeholder
+      grid.innerHTML =
+        '<div class="featured-placeholder">' +
+          '<p>Add your Instagram post URLs in <code>app.js</code> to display them here.</p>' +
+        '</div>';
+      return;
+    }
 
     posts.forEach(function (post) {
-      var card = document.createElement('div');
-      card.className = 'featured-card reveal';
+      var card = buildEmbedCard(post.shortcode, post.type, 'featured-card reveal');
+      // Add pinned badge
+      var pin = document.createElement('div');
+      pin.className = 'featured-card-pin';
+      pin.innerHTML =
+        '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z"/></svg>' +
+        'Pinned';
+      card.insertBefore(pin, card.firstChild);
 
-      var mediaHtml = buildMediaHtml(post, post.type, 64);
+      // Upgrade play button size for featured cards
+      var play = card.querySelector('.feed-card-play');
+      if (play) {
+        play.className = 'featured-card-play';
+        play.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>';
+      }
+      // Remove "Reel" type badge from featured cards
+      var badge = card.querySelector('.feed-card-type');
+      if (badge) badge.remove();
 
-      card.innerHTML =
-        '<div class="featured-card-pin">' +
-          '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z"/></svg>' +
-          'Pinned' +
-        '</div>' +
-        mediaHtml +
-        '<div class="featured-card-overlay">' +
-          '<div class="featured-card-caption">' + post.caption + '</div>' +
-        '</div>' +
-        (post.type === 'reel' ?
-          '<div class="featured-card-play">' +
-            '<svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>' +
-          '</div>' : '');
-
-      card.addEventListener('click', function () {
-        if (post.shortcode) {
-          openEmbedModal(post.shortcode, post.type);
-        } else {
-          window.open(INSTAGRAM_URL, '_blank');
-        }
-      });
       grid.appendChild(card);
     });
-
-    // Re-observe for scroll animations
-    grid.querySelectorAll('.reveal').forEach(function (el) {
-      revealObserver.observe(el);
-    });
-  }
+  })();
 
 
   // --- Build Feed Carousels ---
-  function buildCarousel(trackId, items, cardType) {
+  function buildCarousel(trackId, urls, cardType) {
     var track = document.getElementById(trackId);
     if (!track) return;
-    track.innerHTML = '';
 
-    items.forEach(function (item) {
-      var card = document.createElement('div');
-      card.className = 'feed-card feed-card--' + cardType;
+    var posts = urls.map(parseUrl).filter(Boolean);
 
-      var mediaHtml = buildMediaHtml(item, cardType, cardType === 'reel' ? 48 : 40);
-
-      card.innerHTML =
-        mediaHtml +
-        '<div class="feed-card-overlay">' +
-          '<div class="feed-card-caption">' + item.caption + '</div>' +
-        '</div>' +
-        (cardType === 'reel' ?
-          '<div class="feed-card-play">' +
-            '<svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>' +
+    if (posts.length === 0) {
+      // No URLs — show a single placeholder card
+      var placeholder = document.createElement('div');
+      placeholder.className = 'feed-card feed-card--' + cardType + ' feed-card--placeholder';
+      placeholder.innerHTML =
+        '<div class="card-media" style="background:linear-gradient(135deg, #141e30, #243b55)">' +
+          '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;text-align:center">' +
+            '<span style="font-size:13px;color:var(--text-secondary);line-height:1.5">Add ' + cardType + ' URLs in <code>app.js</code></span>' +
           '</div>' +
-          '<div class="feed-card-type">Reel</div>' : '');
+        '</div>';
+      track.appendChild(placeholder);
+      return;
+    }
 
-      card.addEventListener('click', function () {
-        if (item.shortcode) {
-          openEmbedModal(item.shortcode, cardType);
-        } else {
-          window.open(INSTAGRAM_URL, '_blank');
-        }
-      });
+    posts.forEach(function (post) {
+      var card = buildEmbedCard(post.shortcode, post.type, 'feed-card feed-card--' + cardType);
       track.appendChild(card);
     });
   }
 
-
-  // --- Scroll Reveal (declared early so buildFeaturedGrid can use it) ---
-  var revealElements = document.querySelectorAll('.reveal, .role-card, .service-card, .contact-card, .services-details, .about-text, .about-heading');
-  revealElements.forEach(function (el) { el.classList.add('reveal'); });
-
-  var revealObserver = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-  document.querySelectorAll('.reveal').forEach(function (el) {
-    revealObserver.observe(el);
-  });
-
-
-  // --- Initialize Feed ---
-  function renderFallback() {
-    buildFeaturedGrid(fallbackPinned);
-    buildCarousel('reelsTrack', fallbackReels, 'reel');
-    buildCarousel('trainingTrack', fallbackTraining, 'post');
-    buildCarousel('clinicsTrack', fallbackClinics, 'post');
-  }
-
-  fetchInstagramFeed().then(function (apiPosts) {
-    if (!apiPosts || apiPosts.length === 0) {
-      renderFallback();
-      return;
-    }
-
-    var items = apiPosts.map(apiPostToItem);
-    var videos = items.filter(function (p) { return p.mediaType === 'VIDEO'; });
-    var images = items.filter(function (p) { return p.mediaType !== 'VIDEO'; });
-
-    // Featured: first 3 posts
-    buildFeaturedGrid(items.slice(0, 3));
-
-    // Reels carousel: all videos
-    buildCarousel('reelsTrack', videos.length > 0 ? videos : fallbackReels, 'reel');
-
-    // Training carousel: first half of images
-    var half = Math.ceil(images.length / 2);
-    buildCarousel('trainingTrack', images.length > 0 ? images.slice(0, half) : fallbackTraining, 'post');
-
-    // Clinics carousel: second half of images
-    buildCarousel('clinicsTrack', images.length > half ? images.slice(half) : fallbackClinics, 'post');
-  });
+  buildCarousel('reelsTrack', FEED_REELS, 'reel');
+  buildCarousel('trainingTrack', FEED_POSTS, 'post');
+  // Hide the third carousel if there aren't enough posts to fill it
+  var clinicsTrack = document.getElementById('clinicsTrack');
+  if (clinicsTrack) clinicsTrack.closest('.carousel-section').style.display = 'none';
 
 
   // --- Carousel Controls ---
@@ -411,6 +271,24 @@
       var walk = (x - startX) * 1.5;
       track.scrollLeft = scrollLeft - walk;
     });
+  });
+
+
+  // --- Scroll Reveal ---
+  var revealElements = document.querySelectorAll('.reveal, .role-card, .service-card, .contact-card, .services-details, .about-text, .about-heading');
+  revealElements.forEach(function (el) { el.classList.add('reveal'); });
+
+  var revealObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(function (el) {
+    revealObserver.observe(el);
   });
 
 
